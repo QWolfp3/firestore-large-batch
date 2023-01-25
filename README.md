@@ -40,7 +40,7 @@ largeBatch.commit(10);
 
 This will divide the total number of batches into chunks of 10 and commit them one by one.
 
-This is especially useful when you are performing a very large number of operations and want to avoid exceeding the rate limits of the Firestore API.
+This is especially useful when you are performing a very large number of operations and want to avoid exceeding the limits of 10k writes/second.
 
 **Note**
 
