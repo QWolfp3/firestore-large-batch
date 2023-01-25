@@ -10,8 +10,8 @@ npm install firestore-large-batch
 
 ## Usage
 
-```
-import * as admin from 'firebase-admin'
+```typescript
+import * as admin from "firebase-admin";
 import { LargeBatch } from "firestore-large-batch";
 
 // Initialize Firestore
@@ -20,9 +20,11 @@ const firestore = admin.firestore();
 const largeBatch = new LargeBatch(firestore);
 
 // Add operations to batch
-largeBatch.create(firestore.doc("/users/user1"), {name: "John"});
-largeBatch.set(firestore.doc("/users/user2"), {age: 25});
-largeBatch.update(firestore.doc("/users/user3"), {email: "johndoe@example.com"});
+largeBatch.create(firestore.doc("/users/user1"), { name: "John" });
+largeBatch.set(firestore.doc("/users/user2"), { age: 25 });
+largeBatch.update(firestore.doc("/users/user3"), {
+  email: "johndoe@example.com",
+});
 largeBatch.updateField(firestore.doc("/users/user4"), "address", "New York");
 largeBatch.delete(firestore.doc("/users/user5"));
 
@@ -32,12 +34,14 @@ largeBatch.commit();
 
 You can also pass an optional commit unit to the commit method which will commit that many number of batches at a time.
 
-```
+```typescript
 largeBatch.commit(10);
 ```
+
+This will divide the total number of batches into chunks of 10 and commit them one by one.
 
 This is especially useful when you are performing a very large number of operations and want to avoid exceeding the rate limits of the Firestore API.
 
 **Note**
 
-- The class is designed to automatically create new batches after 500 operations have been added to a batch, so you don't need to worry about creating new batches manually.
+The class automatically creates new batches after reaching the maximum write limit of 500 operations per batch, so that you can continue to add operations without worrying about exceeding the limit.
