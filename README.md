@@ -35,7 +35,7 @@ largeBatch.commit();
 You can also pass an optional commit unit to the commit method which will commit that many number of batches at a time.
 
 ```typescript
-largeBatch.commit(10);
+largeBatch.commit({ commitUnit: 10 });
 ```
 
 This will divide the total number of batches into chunks of 10 and commit them one by one.

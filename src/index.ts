@@ -117,13 +117,13 @@ export class LargeBatch {
    * Commits all batches. Optionally, you can pass a commit unit which controls the number of batches that are committed at a time.
    * @param commitUnit Number of batches to commit at a time.
    */
-  public async commit(commitUnit?: number) {
-    if (!commitUnit) {
+  public async commit(options?: { commitUnit?: number }) {
+    if (!options?.commitUnit) {
       await this.commitBatches(this.batches);
     } else {
       const slicedBatches = Array<Array<firestore.WriteBatch>>();
-      for (let i = 0; i < this.batches.length; i += commitUnit) {
-        const chunk = this.batches.slice(i, i + commitUnit);
+      for (let i = 0; i < this.batches.length; i += options.commitUnit) {
+        const chunk = this.batches.slice(i, i + options.commitUnit);
         slicedBatches.push(chunk);
       }
       for (const batches of slicedBatches) {

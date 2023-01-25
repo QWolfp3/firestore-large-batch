@@ -1,7 +1,7 @@
 {
   "name": "firestore-large-batch",
-  "version": "0.0.2",
-  "description": "Firestore writeBatch extension for 500 more operations.",
+  "version": "1.0.0",
+  "description": "A library for limitless batching operations in Firestore",
   "main": "dist/index.js",
   "files": [
     "dist"
@@ -21,5 +21,13 @@
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.8.3"
-  }
+  },
+  "repository": "git@github.com:santa112358/firestore-large-batch.git",
+  "keywords": [
+    "firestore",
+    "firebase",
+    "batch",
+    "500",
+    "migration"
+  ]
 }
