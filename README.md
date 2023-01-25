@@ -40,26 +40,31 @@ largeBatch.commit(10);
 
 ## API
 
-- `create<T>(documentRef: firestore.DocumentReference<T>, data: T)`
+`create<T>(documentRef: firestore.DocumentReference<T>, data: T)`
 
 Adds a create operation to the current batch.
 
-- `set<T>(documentRef: firestore.DocumentReference<T>, data: Partial<T> | firestore.WithFieldValue<T>, options?: firestore.SetOptions | undefined)`
+
+`set<T>(documentRef: firestore.DocumentReference<T>, data: Partial<T> | firestore.WithFieldValue<T>, options?: firestore.SetOptions | undefined)`
 
 Adds a set operation to the current batch.
 
-- `update<T>(documentRef: firestore.DocumentReference<T>, data: firestore.UpdateData<T>, precondition?: firestore.Precondition)`
+
+`update<T>(documentRef: firestore.DocumentReference<T>, data: firestore.UpdateData<T>, precondition?: firestore.Precondition)`
 
 Adds an update operation to the current batch.
 
-- `updateField(documentRef: firestore.DocumentReference<unknown>, field: string | firestore.FieldPath, value: unknown, ...fieldsOrPrecondition: unknown[])`
+
+`updateField(documentRef: firestore.DocumentReference<unknown>, field: string | firestore.FieldPath, value: unknown, ...fieldsOrPrecondition: unknown[])`
 
 Adds an update field operation to the current batch.
 
-- `delete(documentRef: firestore.DocumentReference<unknown>, precondition?: firestore.Precondition)`
+
+`delete(documentRef: firestore.DocumentReference<unknown>, precondition?: firestore.Precondition)`
 
 Adds a delete operation to the current batch.
 
-- `async commit(commitUnit?: number)`
+
+`async commit(commitUnit?: number)`
 
 Commits all batches. Optionally, you can pass a commit unit which controls the number of batches that are committed at a time.
