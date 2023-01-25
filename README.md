@@ -1,3 +1,6 @@
+[![npm version](https://badge.fury.io/js/firestore-large-batch.svg)](https://badge.fury.io/js/firestore-large-batch)
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
+
 # firestore-large-batch
 
 A library for batching operations in Firestore. This library allows you to perform more than 500 operations in a single batch, and commit them all at once.
