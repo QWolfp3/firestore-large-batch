@@ -1,0 +1,27 @@
+{
+  "name": "firestore-large-batch",
+  "version": "0.0.1",
+  "description": "Firestore writeBatch extension for 500 more operations.",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "author": "SANTA TAKAHASHI",
+  "license": "MIT",
+  "devDependencies": {
+    "@google-cloud/firestore": "^6.4.2",
+    "@typescript-eslint/eslint-plugin": "^5.49.0",
+    "@typescript-eslint/parser": "^5.49.0",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "eslint": "^8.32.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.3"
+  }
+}
