@@ -1,8 +1,8 @@
 # firestore-large-batch
 
-A library for batching operations in Firestore. This library allows you to perform multiple create, set, update, update field, and delete operations in a single batch, and commit them all at once.
+A library for batching operations in Firestore. This library allows you to perform more than 500 operations in a single batch, and commit them all at once.
 
-## Installation
+## Installing
 
 ```
 npm install firestore-large-batch
@@ -14,7 +14,9 @@ npm install firestore-large-batch
 import * as admin from 'firebase-admin'
 import { LargeBatch } from "firestore-large-batch";
 
+// Initialize Firestore
 const firestore = admin.firestore();
+// Initialize LargeBatch
 const largeBatch = new LargeBatch(firestore);
 
 // Add operations to batch
@@ -34,37 +36,8 @@ You can also pass an optional commit unit to the commit method which will commit
 largeBatch.commit(10);
 ```
 
+This is especially useful when you are performing a very large number of operations and want to avoid exceeding the rate limits of the Firestore API.
+
 **Note**
 
 - The class is designed to automatically create new batches after 500 operations have been added to a batch, so you don't need to worry about creating new batches manually.
-
-## API
-
-`create<T>(documentRef: firestore.DocumentReference<T>, data: T)`
-
-Adds a create operation to the current batch.
-
-
-`set<T>(documentRef: firestore.DocumentReference<T>, data: Partial<T> | firestore.WithFieldValue<T>, options?: firestore.SetOptions | undefined)`
-
-Adds a set operation to the current batch.
-
-
-`update<T>(documentRef: firestore.DocumentReference<T>, data: firestore.UpdateData<T>, precondition?: firestore.Precondition)`
-
-Adds an update operation to the current batch.
-
-
-`updateField(documentRef: firestore.DocumentReference<unknown>, field: string | firestore.FieldPath, value: unknown, ...fieldsOrPrecondition: unknown[])`
-
-Adds an update field operation to the current batch.
-
-
-`delete(documentRef: firestore.DocumentReference<unknown>, precondition?: firestore.Precondition)`
-
-Adds a delete operation to the current batch.
-
-
-`async commit(commitUnit?: number)`
-
-Commits all batches. Optionally, you can pass a commit unit which controls the number of batches that are committed at a time.

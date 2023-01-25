@@ -1,20 +1,32 @@
 import * as firestore from "@google-cloud/firestore";
 
+/**
+ *  LargeBatch allows for batching operations in Firestore.
+ */
 export class LargeBatch {
   private firestoreInstance: firestore.Firestore;
   private batches: Array<firestore.WriteBatch>;
   private operationCount = 0;
 
+  /**
+   * Creates a new instance of the `LargeBatch` class.
+   * @param firestoreInstance An instance of Firestore.
+   */
   constructor(firestoreInstance: firestore.Firestore) {
     this.firestoreInstance = firestoreInstance;
     this.batches = [firestoreInstance.batch()];
   }
 
+  /**
+   * Returns the current batch and if the number of operations in that batch reaches 500, a new batch is added to the array
+   */
   private currentBatch() {
     this.operationCount++;
     const batch = this.batches.at(-1);
     if (!batch) {
-      throw Error();
+      const newBatch = this.firestoreInstance.batch();
+      this.batches.push(newBatch);
+      return newBatch;
     }
     if (this.operationCount == 500) {
       this.batches.push(this.firestoreInstance.batch());
@@ -23,10 +35,21 @@ export class LargeBatch {
     return batch;
   }
 
+  /**
+   * Adds a create operation to the current batch.
+   * @param documentRef A Firestore DocumentReference.
+   * @param data The data to be added to the document.
+   */
   public create<T>(documentRef: firestore.DocumentReference<T>, data: T) {
     this.currentBatch().create(documentRef, data);
   }
 
+  /**
+   * Adds a set operation to the current batch.
+   * @param documentRef A Firestore DocumentReference.
+   * @param data The data to be set on the document.
+   * @param options Optional settings to use when setting the document.
+   */
   public set<T>(
     documentRef: firestore.DocumentReference<T>,
     data: Partial<T> | firestore.WithFieldValue<T>,
@@ -39,6 +62,12 @@ export class LargeBatch {
     }
   }
 
+  /**
+   * Adds an update operation to the current batch.
+   * @param documentRef A Firestore DocumentReference.
+   * @param data The data to be updated on the document.
+   * @param precondition An optional precondition to use when updating the document.
+   */
   public update<T>(
     documentRef: firestore.DocumentReference<T>,
     data: firestore.UpdateData<T>,
@@ -51,6 +80,13 @@ export class LargeBatch {
     }
   }
 
+  /**
+   * Adds an update field operation to the current batch.
+   * @param documentRef A Firestore DocumentReference.
+   * @param field The field to update on the document.
+   * @param value The new value of the field.
+   * @param fieldsOrPrecondition Additional fields to update on the document, or an optional precondition to use when updating the document.
+   */
   public updateField(
     documentRef: firestore.DocumentReference<unknown>,
     field: string | firestore.FieldPath,
@@ -65,6 +101,11 @@ export class LargeBatch {
     );
   }
 
+  /**
+   * Adds a delete operation to the current batch.
+   * @param documentRef A Firestore DocumentReference.
+   * @param precondition An optional precondition to use when deleting the document.
+   */
   public delete(
     documentRef: firestore.DocumentReference<unknown>,
     precondition?: firestore.Precondition
@@ -72,6 +113,10 @@ export class LargeBatch {
     this.currentBatch().delete(documentRef, precondition);
   }
 
+  /**
+   * Commits all batches. Optionally, you can pass a commit unit which controls the number of batches that are committed at a time.
+   * @param commitUnit Number of batches to commit at a time.
+   */
   public async commit(commitUnit?: number) {
     if (!commitUnit) {
       await this.commitBatches(this.batches);
@@ -85,11 +130,15 @@ export class LargeBatch {
         await this.commitBatches(batches);
       }
     }
-  }
-
-  private async commitBatches(batches: Array<firestore.WriteBatch>) {
-    await Promise.all(batches.map((batch) => batch.commit()));
     this.batches = [];
     this.operationCount = 0;
+  }
+
+  /**
+   * Commits all batches and reset the batch array and operation count
+   * @param batches Array of batches to be committed
+   */
+  private async commitBatches(batches: Array<firestore.WriteBatch>) {
+    await Promise.all(batches.map((batch) => batch.commit()));
   }
 }
